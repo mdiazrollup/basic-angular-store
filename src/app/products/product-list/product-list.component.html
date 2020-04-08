@@ -1,0 +1,37 @@
+<h2>{{title}}</h2>
+
+
+
+<div *ngIf="errorMessage" class="errorMessage">
+  {{errorMessage}}
+</div>
+<div *ngIf="!errorMessage">
+  <ng-template #loading>
+    <h2 class="loading">Loading Products</h2>
+  </ng-template>
+  <ul class="products" *ngIf="products$ | async as productsAsync;else loading">
+    <li *ngFor="let product of productsAsync | slice:start:end"
+    [class.discontinued]="product.discontinued"
+    [class.selected]="selectedProduct === product"
+    (click)="onSelect(product)"
+    [title]="product | json">
+      <span class="name">{{product.name | uppercase}}</span>
+      <span class="description">{{product.description}}</span>
+      <span class="price">{{product.price | currency: 'CAD': 'symbol-narrow': '.2'}}</span>
+    </li>
+  </ul>
+
+  <div class="right">
+    <a routerLink="insert">Add new product</a>
+  </div>
+
+  <div>
+    <button (click)="previousPage()" [disabled]="start === 0">
+      < Previous Page
+    </button>
+    Page {{currentPage}}
+    <button (click)="nextPage()" >
+      Next Page >
+    </button>
+  </div>
+</div>
